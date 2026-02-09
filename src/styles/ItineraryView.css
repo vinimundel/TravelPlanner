@@ -1,0 +1,103 @@
+.itinerary-view {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    margin-top: 1rem;
+    align-items: flex-start;
+}
+
+/* Scrollbar Styling */
+.itinerary-view::-webkit-scrollbar {
+    height: 8px;
+}
+
+.itinerary-view::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.itinerary-view::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.day-column {
+    min-width: 320px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    /* Allow inner scrolling */
+}
+
+.day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+.day-header h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.day-count {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+}
+
+.day-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 0.5rem;
+}
+
+.timeline-time {
+    font-size: 0.8rem;
+    color: #a5b4fc;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.empty-day {
+    text-align: center;
+    padding: 2rem 0;
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.day-untimed {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.day-untimed h4 {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.untimed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}

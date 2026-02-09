@@ -1,0 +1,5 @@
+name: travel-planner
+channels:
+  - conda-forge
+dependencies:
+  - nodejs=20
