@@ -24,7 +24,7 @@ function AddExpenseForm({ onAdd, onCancel, tripDetails }) {
             ...formData,
             id: Date.now(),
             cost: parseFloat(formData.cost),
-            day: parseInt(formData.day) || 1
+            day: formData.day ? parseInt(formData.day) : null // Pass null if empty
         });
 
         setFormData({

@@ -1,11 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import TripOverview from './components/TripOverview';
 import ExpenseSection from './components/ExpenseSection';
+import PersistenceControls from './components/PersistenceControls';
 import './App.css';
 
+const STORAGE_KEY = 'travel_planner_data';
+
 function App() {
+  // Load initial state from local storage or default
+  const loadInitialState = () => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse saved data", e);
+      }
+    }
+    return null;
+  };
+
+  const initialState = loadInitialState();
+
   // Trip Details State
-  const [tripDetails, setTripDetails] = useState({
+  const [tripDetails, setTripDetails] = useState(initialState?.tripDetails || {
     destinations: [],
     airport: '',
     days: '',
@@ -14,16 +32,22 @@ function App() {
     localCurrencyBudget: 0,
     homeCurrency: 'BRL',
     tripCurrency: 'ARS',
-    exchangeRate: 0.005 // Default e.g. 1 ARS = 0.005 BRL
+    exchangeRate: 0.005
   });
 
   // Expenses State
-  const [expenses, setExpenses] = useState([]);
+  const [expenses, setExpenses] = useState(initialState?.expenses || []);
 
   // Calculated State
   const [remainingBudget, setRemainingBudget] = useState(0);
 
-  // Calculate remaining budget whenever expenses, totalBudget, or exchange rate changes
+  // Auto-Save to LocalStorage
+  useEffect(() => {
+    const dataToSave = { tripDetails, expenses };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+  }, [tripDetails, expenses]);
+
+  // Calculate remaining budget
   useEffect(() => {
     const totalExpenses = expenses
       .filter(expense => expense.isSelected)
@@ -38,13 +62,28 @@ function App() {
   }, [tripDetails.totalBudget, tripDetails.exchangeRate, tripDetails.tripCurrency, expenses]);
 
   const addExpense = (expense) => {
-    // Default new expenses to trip currency if not specified
-    const newExpense = {
+    const baseExpense = {
       ...expense,
       isSelected: true,
       currency: expense.currency || tripDetails.tripCurrency
     };
-    setExpenses([...expenses, newExpense]);
+
+    if (!expense.day) {
+      // Add for EVERY day
+      const totalDays = parseInt(tripDetails.days) || 1;
+      const newExpenses = [];
+      for (let i = 1; i <= totalDays; i++) {
+        newExpenses.push({
+          ...baseExpense,
+          id: Date.now() + i, // Ensure unique IDs
+          day: i
+        });
+      }
+      setExpenses([...expenses, ...newExpenses]);
+    } else {
+      // Add for specific day
+      setExpenses([...expenses, baseExpense]);
+    }
   };
 
   const toggleExpense = (id) => {
@@ -57,12 +96,41 @@ function App() {
     setExpenses(expenses.filter(exp => exp.id !== id));
   };
 
+  const handleLoadPlan = (data) => {
+    if (data.tripDetails) setTripDetails(data.tripDetails);
+    if (data.expenses) setExpenses(data.expenses);
+  };
+
+  const handleResetPlan = () => {
+    if (window.confirm("Are you sure you want to reset all data? This cannot be undone.")) {
+      setTripDetails({
+        destinations: [],
+        airport: '',
+        days: '',
+        date: '',
+        totalBudget: 0,
+        localCurrencyBudget: 0,
+        homeCurrency: 'BRL',
+        tripCurrency: 'ARS',
+        exchangeRate: 0.005
+      });
+      setExpenses([]);
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  };
+
   return (
     <div className="app-container">
       <div className="content-wrapper">
         <header className="app-header">
           <h1>Travel<span>Planner</span></h1>
           <p>Atacama first, Thailand/Berlin next.</p>
+          <PersistenceControls
+            tripDetails={tripDetails}
+            expenses={expenses}
+            onLoadPlan={handleLoadPlan}
+            onReset={handleResetPlan}
+          />
         </header>
 
         <main>
