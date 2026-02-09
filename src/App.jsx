@@ -71,12 +71,15 @@ function App() {
     if (!expense.day) {
       // Add for EVERY day
       const totalDays = parseInt(tripDetails.days) || 1;
+      const dailyCost = baseExpense.cost / totalDays; // Divide total cost by days
+
       const newExpenses = [];
       for (let i = 1; i <= totalDays; i++) {
         newExpenses.push({
           ...baseExpense,
           id: Date.now() + i, // Ensure unique IDs
-          day: i
+          day: i,
+          cost: dailyCost // Set the split cost
         });
       }
       setExpenses([...expenses, ...newExpenses]);
