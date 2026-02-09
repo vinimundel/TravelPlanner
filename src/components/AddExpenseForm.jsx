@@ -14,6 +14,7 @@ function AddExpenseForm({ onAdd, onCancel, tripDetails }) {
     });
 
     const categories = ['Tour', 'Transport', 'Flight', 'Food', 'Other'];
+    const timeEnabledCategories = ['Tour', 'Transport', 'Flight'];
 
     const handleSubmit = (e) => {
         e.preventDefault();
