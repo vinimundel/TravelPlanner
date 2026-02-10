@@ -139,3 +139,25 @@
 .tag button:hover {
     color: #fff;
 }
+
+@media (max-width: 768px) {
+    .overview-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .budget-display {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 0.5rem;
+        border-radius: 8px;
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+}

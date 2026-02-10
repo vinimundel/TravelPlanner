@@ -163,3 +163,21 @@
 .meta-time {
     color: #cbd5e1;
 }
+
+@media (hover: none) and (pointer: coarse) {
+    .card-actions-hover {
+        opacity: 1;
+        transform: translateY(0);
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 8px;
+        padding: 4px;
+        backdrop-filter: blur(4px);
+    }
+}
+
+@media (max-width: 768px) {
+    .card-actions-hover {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
